@@ -1,0 +1,15 @@
+[Unit]
+Description=Switch Screen Daemon
+After=multi-user.target
+
+[Service]
+ExecStart=/usr/local/bin/switchscreen
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+WatchdogSec=10
+NotifyAccess=main
+
+[Install]
+WantedBy=multi-user.target
