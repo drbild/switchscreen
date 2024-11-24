@@ -3,7 +3,7 @@ Description=Switch Screen Daemon
 After=multi-user.target
 
 [Service]
-ExecStart=/usr/local/bin/switchscreen
+ExecStart=@BINDIR@/@PROGRAM@
 Restart=always
 RestartSec=5
 StandardOutput=journal

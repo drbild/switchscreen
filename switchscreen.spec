@@ -8,9 +8,9 @@ Source0:        %{name}-%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  libinput-devel
-BuildRequires:  libinput-devel
 BuildRequires:  systemd-rpm-macros
-Requires:       libinput
+Requires:       libinput10
+Requires:       libinput-udev
 Requires:       libudev1
 Requires(post): systemd
 Requires(preun): systemd
@@ -25,7 +25,7 @@ A systemd-enabled daemon written in C that for a keyboard shortcut to switch inp
 make
 
 %install
-make install DESTDIR=%{buildroot}
+make install prefix=%{_prefix} DESTDIR=%{buildroot}
 
 %clean
 make clean
@@ -37,9 +37,9 @@ make clean
 %systemd_preun %{name}.service
 
 %files
-/usr/local/bin/%{name}
-/usr/local/lib/systemd/system/%{name}.service
+%{_bindir}/%{name}
+%{_unitdir}/%{name}.service
 
 %changelog
-* Thu Nov 23 2024 David R. Bild <david@davidbild.org> - 1.0-1
+* Sat Nov 23 2024 David R. Bild <david@davidbild.org> - 1.0-1
 - Initial package
