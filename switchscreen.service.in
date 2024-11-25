@@ -10,6 +10,17 @@ StandardOutput=journal
 StandardError=journal
 WatchdogSec=10
 NotifyAccess=main
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectHostname=true
+ProtectClock=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+RestrictRealtime=true
+
 
 [Install]
 WantedBy=multi-user.target
