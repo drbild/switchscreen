@@ -59,7 +59,7 @@ clean:
 
 dist: $(PROGRAM) $(UNIT)
 	mkdir -p $(DISTDIR)
-	cp Makefile $(SRC) $(UNIT_SRC) $(RPM_SPEC) $(DISTDIR)/
+	cp README.md Makefile LICENSE $(SRC) $(UNIT_SRC) $(RPM_SPEC) $(DISTDIR)/
 	tar -czf $(DISTFILE) -C $(BUILDDIR) $(DISTNAME)
 	rm -rf $(DISTDIR)
 
