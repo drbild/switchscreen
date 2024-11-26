@@ -71,12 +71,35 @@ void setup_signals() {
 static int open_restricted(const char *path, int flags, void *) {
   int fd = open(path, flags);
   if (fd < 0) {
-    fprintf(stderr, "Failed to open %s: %s\n", path, strerror(errno));
+    sd_journal_print(LOG_ERR, "Failed to open %s: %s\n", path, strerror(errno));
   }
   return fd;
 }
 
 static void close_restricted(int fd, void *) { close(fd); }
+
+void log_libinput_to_sd_journal(struct libinput*,
+                                enum libinput_log_priority priority,
+                                const char *format,
+                                va_list args) {
+  int sd_priority;
+  switch (priority) {
+  case LIBINPUT_LOG_PRIORITY_ERROR:
+    sd_priority = LOG_ERR;
+    break;
+  case LIBINPUT_LOG_PRIORITY_INFO:
+    sd_priority = LOG_INFO;
+    break;
+  case LIBINPUT_LOG_PRIORITY_DEBUG:
+    sd_priority = LOG_DEBUG;
+    break;
+  default:
+    sd_priority = LOG_INFO;
+    break;
+  }
+
+  sd_journal_printv(sd_priority, format, args);
+}
 
 static const struct libinput_interface libinput_interface = {
     .open_restricted = open_restricted, .close_restricted = close_restricted};
@@ -132,6 +155,9 @@ int main() {
     goto free_udev;
   }
   sd_journal_print(LOG_INFO, "Created libinput context");
+
+  libinput_log_set_handler(li, log_libinput_to_sd_journal);
+  libinput_log_set_priority(li, LIBINPUT_LOG_PRIORITY_DEBUG);
 
   if (libinput_udev_assign_seat(li, "seat0") < 0) {
     sd_journal_print(LOG_ERR, "Failed to assign seat0");
